@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SASP Communications — Fall 2026</title>
+<style>
+  :root{
+    --ink:#20242c;
+    --ink-soft:#4c525c;
+    --ink-faint:#7c828c;
+    --card: rgba(255,255,255,0.90);
+    --card-solid:#ffffff;
+    --line: rgba(46,66,86,0.16);
+
+    --navy:#2e4256;
+    --navy-soft:#e3e9ee;
+    --forest:#3c5c48;
+    --forest-soft:#e5ede6;
+    --gold:#93691f;
+    --gold-soft:#f2e8d4;
+    --maroon:#7c3b3b;
+    --maroon-soft:#f3e3e1;
+
+    --radius:12px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+    font-size:15px;
+    color:var(--ink);
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 15% -10%, rgba(255,255,255,0.06), transparent 40%),
+      linear-gradient(160deg, #1c2a3a 0%, #24384a 45%, #2e4256 100%);
+    background-attachment:fixed;
+  }
+  a{color:inherit;}
+  h1,h2,h3{font-family:'Iowan Old Style','Georgia',serif;}
+
+  #topbar{
+    background:rgba(255,255,255,0.10);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid rgba(255,255,255,0.14);
+    padding:18px 40px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    position:sticky;
+    top:0;
+    z-index:10;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .brand-eyebrow{
+    font-size:11px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:#cfe0ee;
+    font-weight:700;
+    margin:0 0 3px 0;
+  }
+  .brand-title{
+    margin:0;
+    font-size:20px;
+    font-weight:600;
+    color:#ffffff;
+  }
+  #nav-links{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  .nav-btn{
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.22);
+    border-radius:20px;
+    padding:8px 17px;
+    font-size:13px;
+    font-weight:600;
+    color:#e8eef4;
+    cursor:pointer;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .nav-btn:hover{background:rgba(255,255,255,0.18);}
+  .nav-btn.active{background:#ffffff; border-color:#ffffff; color:var(--navy);}
+
+  #main{
+    max-width:1120px;
+    margin:0 auto;
+    padding:44px 40px 80px;
+  }
+
+  /* ---- Home: one glass box per week ---- */
+  .week-table{
+    width:100%;
+    background:var(--card);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    border:1.5px solid rgba(255,255,255,0.55);
+    border-radius:16px;
+    overflow:hidden;
+    margin-bottom:26px;
+    box-shadow:0 10px 30px rgba(10,20,35,0.18);
+  }
+  .week-head{
+    padding:22px 26px 14px 26px;
+    text-align:center;
+    border-bottom:1.5px solid var(--line);
+  }
+  .week-block-meta{
+    font-size:13px;
+    color:var(--ink-faint);
+    font-weight:800;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+  }
+  .week-block-period{
+    font-size:12px;
+    color:var(--ink-faint);
+    margin-top:2px;
+    font-weight:500;
+  }
+  .week-table h2{
+    margin:6px 0 0 0;
+    font-size:23px;
+    font-weight:700;
+    color:var(--ink);
+  }
+  .week-body{
+    padding:22px 26px 26px 26px;
+    display:grid;
+    grid-template-columns:1fr 250px;
+    gap:14px;
+    align-items:stretch;
+  }
+  .week-left{
+    display:flex;
+    flex-direction:column;
+  }
+  .card-row{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:12px;
+    margin-bottom:0;
+  }
+  .type-card{
+    border:1.5px solid var(--line);
+    border-left:5px solid var(--card-accent, var(--navy));
+    border-radius:11px;
+    padding:14px 13px 14px 15px;
+    text-align:center;
+    cursor:pointer;
+    background:rgba(255,255,255,0.65);
+    transition:box-shadow .18s ease, transform .18s ease, background .18s ease;
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    min-height:82px;
+  }
+  .type-card:hover{
+    box-shadow:0 8px 20px rgba(20,30,45,0.14);
+    transform:translateY(-3px);
+    background:rgba(255,255,255,0.92);
+  }
+  .type-card.rm{--card-accent:var(--navy);}
+  .type-card.fs{--card-accent:var(--forest);}
+  .type-card.sm{--card-accent:var(--gold);}
+  .type-card-label{
+    font-size:13px;
+    font-weight:700;
+    color:var(--card-accent, var(--navy));
+  }
+  .type-card-preview{
+    font-size:11.5px;
+    color:var(--ink-faint);
+    margin-top:6px;
+    line-height:1.4;
+    display:-webkit-box;
+    -webkit-line-clamp:1;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+  }
+  .type-card-sub{
+    font-size:11px;
+    color:var(--ink-faint);
+    margin-top:6px;
+    font-weight:600;
+  }
+
+  /* Important dates box — full-height sidebar next to tiles + aligned messages */
+  .dates-box{
+    border:1.5px solid var(--line);
+    border-left:5px solid var(--maroon);
+    background:rgba(255,255,255,0.65);
+    border-radius:11px;
+    padding:14px 16px;
+    height:100%;
+  }
+  .dates-box-label{
+    font-size:10.5px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--maroon);
+    font-weight:800;
+    margin:0 0 7px 0;
+  }
+  .dates-list{
+    list-style:none;
+    margin:0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+  }
+  .dates-list li{
+    font-size:12px;
+    color:var(--ink);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:8px;
+    line-height:1.35;
+    background:var(--maroon-soft);
+    border-radius:20px;
+    padding:8px 12px;
+  }
+  .dates-list .d-date{
+    color:var(--maroon);
+    font-weight:700;
+    white-space:nowrap;
+    flex-shrink:0;
+    background:rgba(255,255,255,0.65);
+    border-radius:20px;
+    padding:2px 9px;
+    font-size:11px;
+  }
+  .dates-empty{
+    font-size:11.5px;
+    color:var(--ink-faint);
+    font-style:italic;
+  }
+
+  /* ---- Aligned messages, per week ---- */
+  .week-aligned-label{
+    font-size:11px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    font-weight:800;
+    margin:16px 0 11px 0;
+    padding-top:16px;
+    border-top:1.5px solid var(--line);
+  }
+  .aligned-item{
+    margin-bottom:9px;
+  }
+  .aligned-item:last-child{margin-bottom:0;}
+  .aligned-item .msg-box{
+    border:1.5px solid var(--line);
+    border-left:5px solid var(--navy);
+    border-radius:11px;
+    padding:13px 17px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    cursor:pointer;
+    background:rgba(255,255,255,0.65);
+    text-align:left;
+    font-size:14px;
+    color:inherit;
+    width:100%;
+    transition:box-shadow .18s ease, transform .18s ease, background .18s ease;
+  }
+  .aligned-item .msg-box:hover{
+    box-shadow:0 8px 20px rgba(20,30,45,0.12);
+    transform:translateY(-2px);
+    background:rgba(255,255,255,0.92);
+  }
+  .aligned-item .dept-name{
+    font-weight:700;
+    color:var(--navy);
+  }
+  .aligned-item .msg-theme{
+    color:var(--ink-soft);
+  }
+  .aligned-item .due{
+    color:var(--maroon);
+    font-weight:700;
+    white-space:nowrap;
+    font-size:12px;
+    background:var(--maroon-soft);
+    border-radius:20px;
+    padding:6px 13px;
+    flex-shrink:0;
+  }
+  .empty-cell{
+    color:var(--ink-faint);
+    font-style:italic;
+    font-size:13.5px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1.5px dashed var(--line);
+    border-radius:11px;
+    padding:16px;
+    text-align:center;
+  }
+
+  /* ---- Type index pages ---- */
+  .page-glass{
+    background:var(--card);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    border:1.5px solid rgba(255,255,255,0.55);
+    border-radius:16px;
+    padding:32px 36px;
+    box-shadow:0 10px 30px rgba(10,20,35,0.18);
+  }
+  .type-page-title{
+    font-size:29px;
+    font-weight:700;
+    margin:0 0 6px 0;
+  }
+  .type-page-sub{
+    font-size:14px;
+    color:var(--ink-faint);
+    margin-bottom:26px;
+  }
+  .back-link{
+    display:inline-block;
+    font-size:13.5px;
+    font-weight:700;
+    color:#e8eef4;
+    text-decoration:none;
+    margin-bottom:16px;
+    cursor:pointer;
+    background:rgba(255,255,255,0.10);
+    border:1px solid rgba(255,255,255,0.24);
+    border-radius:20px;
+    padding:7px 16px;
+  }
+  .back-link:hover{background:rgba(255,255,255,0.2);}
+  .type-entry{
+    background:rgba(255,255,255,0.7);
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    padding:20px 24px;
+    margin-bottom:16px;
+    transition:box-shadow .3s ease, border-color .3s ease;
+    scroll-margin-top:90px;
+  }
+  .type-entry.highlighted{
+    border-color:var(--navy);
+    box-shadow:0 0 0 3px var(--navy-soft);
+    background:rgba(255,255,255,0.95);
+  }
+  .type-entry-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-bottom:10px;
+  }
+  .type-entry-week{
+    font-size:13px;
+    font-weight:700;
+    color:var(--ink-faint);
+  }
+  .type-entry-theme{
+    font-size:16.5px;
+    font-weight:700;
+    color:var(--ink);
+  }
+  .type-entry-body{
+    font-size:14.5px;
+    line-height:1.7;
+    color:var(--ink-soft);
+  }
+  .type-entry-body p{margin:0 0 12px 0;}
+  .type-entry-body p:last-child{margin-bottom:0;}
+  .type-entry-body .src-label{
+    font-size:11px;
+    letter-spacing:.03em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    font-weight:700;
+    display:block;
+    margin-bottom:4px;
+  }
+  .type-entry-link{
+    display:inline-block;
+    margin-top:6px;
+    font-size:13px;
+    font-weight:700;
+    text-decoration:none;
+    padding:8px 17px;
+    border-radius:20px;
+    transition:opacity .15s ease;
+  }
+  .type-entry-link:hover{opacity:0.8;}
+  .type-entry-link.rm{background:var(--navy-soft); color:var(--navy);}
+  .type-entry-link.fs{background:var(--forest-soft); color:var(--forest);}
+  .type-entry-link.sm{background:var(--gold-soft); color:var(--gold);}
+  .type-entry-empty{
+    font-style:italic;
+    color:var(--ink-faint);
+    font-size:13.5px;
+  }
+
+  /* ---- Departments list & detail ---- */
+  .dept-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
+    gap:14px;
+  }
+  .dept-card{
+    background:rgba(255,255,255,0.7);
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    padding:20px;
+    cursor:pointer;
+    text-align:left;
+    transition:box-shadow .18s ease, transform .18s ease, background .18s ease;
+  }
+  .dept-card:hover{
+    box-shadow:0 8px 20px rgba(20,30,45,0.13);
+    transform:translateY(-3px);
+    background:rgba(255,255,255,0.95);
+  }
+  .dept-card-name{
+    font-size:16.5px;
+    font-weight:700;
+    color:var(--ink);
+    margin-bottom:4px;
+  }
+  .dept-card-count{
+    font-size:12.5px;
+    color:var(--ink-faint);
+  }
+  .dept-entry{
+    background:rgba(255,255,255,0.7);
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    padding:16px 20px;
+    margin-bottom:12px;
+    cursor:pointer;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    text-align:left;
+    width:100%;
+    transition:box-shadow .18s ease, transform .18s ease, background .18s ease;
+    scroll-margin-top:90px;
+  }
+  .dept-entry:hover{
+    box-shadow:0 8px 20px rgba(20,30,45,0.12);
+    transform:translateY(-2px);
+    background:rgba(255,255,255,0.95);
+  }
+  .dept-entry.highlighted{
+    border-color:var(--navy);
+    box-shadow:0 0 0 3px var(--navy-soft);
+    background:rgba(255,255,255,0.95);
+  }
+  .dept-entry-left{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+  }
+  .dept-entry-week{
+    font-size:11.5px;
+    color:var(--ink-faint);
+    font-weight:700;
+  }
+  .dept-entry-label{
+    font-size:14.5px;
+    color:var(--ink);
+    font-weight:700;
+  }
+  .dept-detail-due{
+    color:var(--maroon);
+    font-weight:700;
+    white-space:nowrap;
+    font-size:12px;
+    background:var(--maroon-soft);
+    border-radius:20px;
+    padding:8px 14px;
+  }
+
+  @media (max-width:760px){
+    #main{padding:28px 18px;}
+    #topbar{padding:14px 18px; flex-wrap:wrap; gap:10px;}
+    .week-body{grid-template-columns:1fr;}
+    .card-row{grid-template-columns:1fr 1fr;}
+    .dept-entry{flex-direction:column; align-items:flex-start;}
+    .aligned-item .msg-box{flex-direction:column; align-items:flex-start;}
+    .page-glass{padding:24px 20px;}
+  }
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <div>
+    <p class="brand-eyebrow">SASP · Communications</p>
+    <p class="brand-title">Fall 2026 Weekly Overview</p>
+  </div>
+  <div id="nav-links">
+    <button class="nav-btn" data-view="home">Overview</button>
+    <button class="nav-btn" data-view="rm">Reenrollment messages</button>
+    <button class="nav-btn" data-view="fs">Faculty slides</button>
+    <button class="nav-btn" data-view="sm">Social slides</button>
+    <button class="nav-btn" data-view="dept">Departments</button>
+  </div>
+</div>
+
+<main id="main"></main>
+
+<script>
+/* ============================================================
+   EDIT WEEKS HERE.
+   - reenrollment: array of {source, text}. source can be "".
+   - faculty / social: { href }. Leave href "" for "not added yet".
+   - dates: [{ label, date }] — REAL academic-calendar deadlines
+     for that week (VOE, refund cutoffs, add/drop, etc.), not
+     generic notes. Pull these from the official John Jay calendar.
+   - aligned: [{ sentBy, theme, due, message, faculty:{href}, social:{href} }]
+   ============================================================ */
+const WEEKS = [
+  {
+    weekLabel: "Week 1",
+    date: "8/24",
+    periodStart: "8/24/2026",
+    periodEnd: "8/30/2026",
+    theme: "Welcome + Start Strong",
+    sentDate: "8/26/2026",
+    reenrollment: [
+      {
+        source: "Excel Tracker",
+        text: "Classes start on Tuesday, 8/26, but if you need to make any last-minute changes to your schedule, you have until Monday, September 1 to do so. Before making changes, check your DegreeWorks Audit and confirm with Jay Express that the change will not impact your financial aid. Between 8/26 and 9/1, there is an $18 change-of-program fee per class if you add or swap a class, and if you drop a class during this time, you will receive a 75% refund. And if you have not yet set up your CUNY and Microsoft Multi-Factor Authentication to keep access to CUNYfirst, Brightspace, Navigate, and email, please do so before 9/2. [MFA instructions link]"
+      },
+      {
+        source: "Success Campaign Website",
+        text: "Hello [First Name]! Classes start Tues, Aug 26, and there are important changes to how you will access your John Jay and CUNY accounts. You must set up CUNY Multi-Factor Authentication (MFA) to keep access to CUNYfirst, Schedule Builder, Brightspace, Navigate, and more. Set this up by August 29, 2025, to avoid losing access. It only takes 5 minutes with your computer + phone. Instructions here."
+      }
+    ],
+    faculty: { href: "https://drive.google.com/file/d/1J15RCJL_V0UZqjhRh26Dqv6m4mdJxQGX/view" },
+    social: { href: "" },
+    dates: [
+      { label: "First day of classes", date: "8/28" },
+      { label: "100% tuition refund deadline", date: "8/27" },
+      { label: "Add/swap without late fee", date: "8/27" }
+    ],
+    aligned: [
+      { sentBy: "Registrar", theme: "Add/drop deadline reminder", due: "8/27", message: "", faculty: { href: "" }, social: { href: "" } },
+      { sentBy: "Financial Aid", theme: "FAFSA verification requests going out", due: "9/2", message: "", faculty: { href: "" }, social: { href: "" } }
+    ]
+  },
+  {
+    weekLabel: "Week 2",
+    date: "8/31",
+    periodStart: "8/31/2026",
+    periodEnd: "9/6/2026",
+    theme: "Key Deadlines",
+    sentDate: "9/2/2026",
+    reenrollment: [
+      {
+        source: "",
+        text: "Heads up, Bloodhound! The deadline to drop classes for a 50% tuition refund is September 8, 2025, and the last day to drop without a grade of \"W\" or qualify for a 25% tuition refund is September 15. September 15 is also the deadline for attendance verification. Be sure to review your courses before these deadlines, log in to Brightspace for your assignments, and reach out to an Academic Advisor or contact jayexpress@jay.cuny.edu if you have any questions or need assistance!"
+      }
+    ],
+    faculty: { href: "https://drive.google.com/file/d/1j4NPMOoxmCvMr6jUBn45sbV6n5N5Pw-p/view" },
+    social: { href: "" },
+    dates: [
+      { label: "VOE opens", date: "9/4" },
+      { label: "Drop w/o \"WD\" grade deadline", date: "9/3" },
+      { label: "75% tuition refund deadline", date: "9/3" },
+      { label: "Add/swap w/ late fee deadline", date: "9/3" }
+    ],
+    aligned: [
+      { sentBy: "Registrar", theme: "Add/swap deadline", due: "9/3", message: "", faculty: { href: "" }, social: { href: "" } },
+      { sentBy: "Registrar", theme: "Verification of enrollment (VOE) opens", due: "9/4", message: "", faculty: { href: "" }, social: { href: "" } }
+    ]
+  },
+  {
+    weekLabel: "Week 3",
+    date: "9/7",
+    periodStart: "9/7/2026",
+    periodEnd: "9/13/2026",
+    theme: "Build Strong Academic Habits",
+    sentDate: "9/8/2026",
+    reenrollment: [
+      {
+        source: "",
+        text: "Did you know that connecting with your professors can increase your academic success, help you find mentors, and open doors for future opportunities? Try these tips: 1) Introduce yourself early, 2) Visit office hours, 3) Participate in class, and 4) Ask questions when you need help. Start it this week — your future self will thank you!"
+      }
+    ],
+    faculty: { href: "https://drive.google.com/file/d/11d-mg9RwEHql6Z_ghZu4jG-GWvJruYqn/view" },
+    social: { href: "" },
+    dates: [
+      { label: "College closed — no classes", date: "9/7" },
+      { label: "50% tuition refund deadline", date: "9/10" },
+      { label: "Pass/No Credit deadline", date: "9/10" }
+    ],
+    aligned: [
+      { sentBy: "Registrar", theme: "Pass/No Credit grade option deadline", due: "9/10", message: "", faculty: { href: "" }, social: { href: "" } }
+    ]
+  },
+  {
+    weekLabel: "Week 4",
+    date: "9/14",
+    periodStart: "9/14/2026",
+    periodEnd: "9/20/2026",
+    theme: "Stay on Track Academically",
+    sentDate: "9/16/2026",
+    reenrollment: [
+      {
+        source: "",
+        text: "Quick reminder: today is the last day to drop a class without a W. Week 4 is also a great time to plan out your assignments—use a calendar, break assignments into steps, and set small deadlines. Our Learning Centers are here to help: https://www.jjay.cuny.edu/academics/academic-resources-services/tutoring-academic-support"
+      }
+    ],
+    faculty: { href: "https://docs.google.com/presentation/d/1GBZgisDCZq3s3apiRlG5VJijOl7CFvqj1/present?slide=id.p1" },
+    social: { href: "" },
+    dates: [
+      { label: "VOE closes", date: "9/17" },
+      { label: "Last day to declare major", date: "9/17" },
+      { label: "Drop w/o \"W\" grade deadline", date: "9/17" },
+      { label: "25% tuition refund deadline", date: "9/17" },
+      { label: "\"W\" / \"WN\" grades assigned", date: "9/18" }
+    ],
+    aligned: [
+      { sentBy: "Registrar", theme: "Declare-your-major deadline", due: "9/17", message: "", faculty: { href: "" }, social: { href: "" } },
+      { sentBy: "Financial Aid", theme: "25% refund window closing", due: "9/17", message: "", faculty: { href: "" }, social: { href: "" } }
+    ]
+  },
+  {
+    weekLabel: "Week 5",
+    date: "9/21",
+    periodStart: "9/21/2026",
+    periodEnd: "9/27/2026",
+    theme: "Use Academic Support Early",
+    sentDate: "9/23/2026",
+    reenrollment: [
+      {
+        source: "",
+        text: "You might need some extra help in a class this term—no worries, we've got you! Here are some tips and resources: Give yourself more review time than you think you'll need, join classmates for group study sessions, talk to your professors if you have questions, and schedule a tutoring appointment through EAB Navigate on the web or in the app. [Navigate link]"
+      }
+    ],
+    faculty: { href: "https://docs.google.com/presentation/d/1M3W6TpjkV6fdQQDJdqZSjYy3alG61PG5/present?rtpof=true&sd=true&slide=id.p1" },
+    social: { href: "" },
+    dates: [
+      { label: "No classes scheduled", date: "9/21" },
+      { label: "Grade appeal deadline (Sp/Su 2026)", date: "9/24" },
+      { label: "WA grades assigned", date: "9/27" }
+    ],
+    aligned: [
+      { sentBy: "Cohort Groups", theme: "WN grade reminder (targeted)", due: "9/21", message: "", faculty: { href: "" }, social: { href: "" } },
+      { sentBy: "Advisement", theme: "Non-mandatory advising campaign", due: "9/21", message: "", faculty: { href: "" }, social: { href: "" } }
+    ]
+  }
+];
+/* ============================================================ */
+
+const main = document.getElementById('main');
+const navBtns = document.querySelectorAll('.nav-btn');
+
+function setActiveNav(view){
+  navBtns.forEach(b => b.classList.toggle('active', b.dataset.view === view));
+}
+
+function previewText(week){
+  const t = week.reenrollment[0] ? week.reenrollment[0].text : "";
+  return t.length > 70 ? t.slice(0, 70) + "…" : t;
+}
+
+function renderHome(){
+  setActiveNav('home');
+
+  const tables = WEEKS.map((w, wi) => {
+    const alignedHTML = w.aligned.length
+      ? w.aligned.map((a, ai) => `
+          <div class="aligned-item">
+            <button class="msg-box" data-week="${wi}" data-aligned="${ai}">
+              <span><span class="dept-name">${a.sentBy}:</span> <span class="msg-theme">${a.theme}</span></span>
+              <span class="due">Due ${a.due}</span>
+            </button>
+          </div>`).join('')
+      : `<span class="empty-cell">No aligned messages logged yet.</span>`;
+
+    const datesHTML = w.dates.length
+      ? `<ul class="dates-list">${w.dates.map(d => `<li><span>${d.label}</span><span class="d-date">${d.date}</span></li>`).join('')}</ul>`
+      : `<span class="dates-empty">None logged yet.</span>`;
+
+    return `
+      <div class="week-table">
+        <div class="week-head">
+          <div class="week-block-meta">${w.weekLabel}</div>
+          <div class="week-block-period">${w.periodStart} &ndash; ${w.periodEnd}</div>
+          <h2>${w.theme}</h2>
+        </div>
+        <div class="week-body">
+          <div class="week-left">
+            <div class="card-row">
+              <button class="type-card rm" data-view="rm" data-week="${wi}">
+                <div class="type-card-label">Reenrollment message</div>
+                <div class="type-card-preview">${previewText(w)}</div>
+              </button>
+              <button class="type-card fs" data-view="fs" data-week="${wi}">
+                <div class="type-card-label">Faculty slide</div>
+                <div class="type-card-sub">${w.faculty.href ? 'View slide ›' : 'Not added yet'}</div>
+              </button>
+              <button class="type-card sm" data-view="sm" data-week="${wi}">
+                <div class="type-card-label">Social slide</div>
+                <div class="type-card-sub">${w.social.href ? 'View slide ›' : 'Not added yet'}</div>
+              </button>
+            </div>
+            <p class="week-aligned-label">Aligned messages &amp; due dates</p>
+            ${alignedHTML}
+          </div>
+          <div class="dates-box">
+            <p class="dates-box-label">Important dates this week</p>
+            ${datesHTML}
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+
+  main.innerHTML = tables;
+
+  document.querySelectorAll('.type-card').forEach(btn => {
+    btn.addEventListener('click', () => renderTypePage(btn.dataset.view, parseInt(btn.dataset.week, 10)));
+  });
+  document.querySelectorAll('.aligned-item .msg-box').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const wi = parseInt(btn.dataset.week, 10);
+      const ai = parseInt(btn.dataset.aligned, 10);
+      renderDeptDetail(WEEKS[wi].aligned[ai].sentBy, wi, ai, 'home');
+    });
+  });
+}
+
+function renderTypePage(type, highlightIndex){
+  setActiveNav(type);
+
+  const config = {
+    rm: { title: "Reenrollment messages", sub: "The full Signal Vine message sent to students each week.", accent: "rm" },
+    fs: { title: "Faculty slides", sub: "The faculty-facing slide or graphic for each week.", accent: "fs" },
+    sm: { title: "Social slides", sub: "The social media graphic for each week.", accent: "sm" }
+  }[type];
+
+  let html = `<button class="back-link" id="type-back">&lsaquo; Back to overview</button><div class="page-glass">
+    <p class="type-page-title">${config.title}</p>
+    <p class="type-page-sub">${config.sub}</p>`;
+
+  WEEKS.forEach((w, i) => {
+    const isHighlighted = i === highlightIndex;
+    html += `<div class="type-entry${isHighlighted ? ' highlighted' : ''}" id="entry-${type}-${i}">
+      <div class="type-entry-head">
+        <span class="type-entry-week">${w.weekLabel} &middot; ${w.date}</span>
+        <span class="type-entry-theme">${w.theme}</span>
+      </div>`;
+
+    if (type === 'rm') {
+      html += `<div class="type-entry-body">${w.reenrollment.map(m => `
+        <p>${m.source ? `<span class="src-label">${m.source}</span>` : ''}${m.text}</p>`).join('')}</div>`;
+    } else {
+      const data = type === 'fs' ? w.faculty : w.social;
+      if (data && data.href) {
+        html += `<a class="type-entry-link ${config.accent}" href="${data.href}" target="_blank" rel="noopener">Open &rsaquo;</a>`;
+      } else {
+        html += `<p class="type-entry-empty">Not added yet.</p>`;
+      }
+    }
+    html += `</div>`;
+  });
+
+  html += `</div>`;
+  main.innerHTML = html;
+
+  document.getElementById('type-back').addEventListener('click', renderHome);
+
+  if (Number.isInteger(highlightIndex)) {
+    const target = document.getElementById(`entry-${type}-${highlightIndex}`);
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
+/* ---- Departments: list -> department detail (highlightable) -> single message detail ---- */
+
+function getDepartments(){
+  const names = new Set();
+  WEEKS.forEach(w => w.aligned.forEach(a => names.add(a.sentBy)));
+  return Array.from(names).sort();
+}
+
+function renderDeptList(){
+  setActiveNav('dept');
+  const depts = getDepartments();
+
+  let html = `<div class="page-glass">
+    <p class="type-page-title">Departments</p>
+    <p class="type-page-sub">Every department's messages, organized by who sent them.</p>
+    <div class="dept-grid">
+      <button class="dept-card" data-dept="__reenrollment__">
+        <div class="dept-card-name">Reenrollment Group</div>
+        <div class="dept-card-count">${WEEKS.length} message${WEEKS.length === 1 ? '' : 's'}</div>
+      </button>`;
+
+  if (depts.length) {
+    const counts = depts.map(name => {
+      let count = 0;
+      WEEKS.forEach(w => w.aligned.forEach(a => { if (a.sentBy === name) count++; }));
+      return { name, count };
+    });
+    html += counts.map(d => `
+      <button class="dept-card" data-dept="${d.name}">
+        <div class="dept-card-name">${d.name}</div>
+        <div class="dept-card-count">${d.count} message${d.count === 1 ? '' : 's'}</div>
+      </button>`).join('');
+  }
+  html += `</div></div>`;
+
+  main.innerHTML = html;
+  document.querySelectorAll('.dept-card').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.dataset.dept === '__reenrollment__') renderTypePage('rm');
+      else renderDeptDetail(btn.dataset.dept);
+    });
+  });
+}
+
+function renderDeptDetail(deptName, highlightWeek, highlightAligned, fromView){
+  setActiveNav('dept');
+
+  const backHTML = fromView === 'home'
+    ? `<button class="back-link" id="dept-back">&lsaquo; Back to overview</button>`
+    : `<button class="back-link" id="dept-back">&lsaquo; Back to departments</button>`;
+
+  let html = `${backHTML}<div class="page-glass">
+    <p class="type-page-title">${deptName}</p>
+    <p class="type-page-sub">All aligned messages sent by ${deptName}, across weeks.</p>`;
+
+  const entries = [];
+  WEEKS.forEach((w, wi) => {
+    w.aligned.forEach((a, ai) => {
+      if (a.sentBy === deptName) entries.push({ wi, ai, w, a });
+    });
+  });
+
+  if (!entries.length) {
+    html += `<p class="type-entry-empty">No messages logged yet.</p>`;
+  } else {
+    html += entries.map(e => {
+      const isHighlighted = e.wi === highlightWeek && e.ai === highlightAligned;
+      return `
+      <button class="dept-entry${isHighlighted ? ' highlighted' : ''}" id="dept-entry-${e.wi}-${e.ai}" data-week="${e.wi}" data-aligned="${e.ai}">
+        <div class="dept-entry-left">
+          <span class="dept-entry-week">${e.w.weekLabel} &middot; ${e.w.date}</span>
+          <span class="dept-entry-label">${e.a.theme}</span>
+        </div>
+        <span class="dept-detail-due">Due ${e.a.due}</span>
+      </button>`;
+    }).join('');
+  }
+  html += `</div>`;
+
+  main.innerHTML = html;
+  document.getElementById('dept-back').addEventListener('click', () => {
+    if (fromView === 'home') renderHome();
+    else renderDeptList();
+  });
+  document.querySelectorAll('.dept-entry').forEach(btn => {
+    btn.addEventListener('click', () => {
+      renderAlignedDetail(parseInt(btn.dataset.week, 10), parseInt(btn.dataset.aligned, 10), deptName, highlightWeek, highlightAligned, fromView);
+    });
+  });
+
+  if (Number.isInteger(highlightWeek) && Number.isInteger(highlightAligned)) {
+    const target = document.getElementById(`dept-entry-${highlightWeek}-${highlightAligned}`);
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
+function renderAlignedDetail(weekIndex, alignedIndex, deptName, highlightWeek, highlightAligned, fromView){
+  setActiveNav('dept');
+  const w = WEEKS[weekIndex];
+  const a = w.aligned[alignedIndex];
+
+  let html = `
+    <button class="back-link" id="aligned-back">&lsaquo; Back to ${deptName}</button>
+    <div class="page-glass">
+    <p class="type-page-title">${a.theme}</p>
+    <p class="type-page-sub">${a.sentBy} &middot; ${w.weekLabel} &middot; ${w.date} &middot; Due ${a.due}</p>
+
+    <div class="type-entry">
+      <div class="type-entry-head"><span class="type-entry-week">Message</span></div>
+      ${a.message ? `<div class="type-entry-body"><p>${a.message}</p></div>` : `<p class="type-entry-empty">Not added yet.</p>`}
+    </div>
+
+    <div class="type-entry">
+      <div class="type-entry-head"><span class="type-entry-week">Faculty slide</span></div>
+      ${a.faculty && a.faculty.href ? `<a class="type-entry-link fs" href="${a.faculty.href}" target="_blank" rel="noopener">Open &rsaquo;</a>` : `<p class="type-entry-empty">Not added yet.</p>`}
+    </div>
+
+    <div class="type-entry">
+      <div class="type-entry-head"><span class="type-entry-week">Social slide</span></div>
+      ${a.social && a.social.href ? `<a class="type-entry-link sm" href="${a.social.href}" target="_blank" rel="noopener">Open &rsaquo;</a>` : `<p class="type-entry-empty">Not added yet.</p>`}
+    </div>
+    </div>`;
+
+  main.innerHTML = html;
+
+  document.getElementById('aligned-back').addEventListener('click', () => {
+    renderDeptDetail(deptName, highlightWeek, highlightAligned, fromView);
+  });
+}
+
+navBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (btn.dataset.view === 'home') renderHome();
+    else if (btn.dataset.view === 'dept') renderDeptList();
+    else renderTypePage(btn.dataset.view);
+  });
+});
+
+renderHome();
+</script>
+
+</body>
+</html>
