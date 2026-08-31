@@ -129,6 +129,13 @@
     font-weight:700;
     color:var(--ink);
   }
+  .theme-pending{
+    font-size:11.5px;
+    color:var(--maroon);
+    font-weight:700;
+    font-style:italic;
+    margin:5px 0 0 0;
+  }
   .week-body{
     padding:22px 26px 26px 26px;
     display:grid;
@@ -166,7 +173,11 @@
     transform:translateY(-3px);
     background:rgba(255,255,255,0.92);
   }
-  .type-card.rm{--card-accent:var(--navy);}
+  .type-card.rm{
+    --card-accent:var(--navy);
+    background:var(--navy-soft);
+  }
+  .type-card.rm:hover{background:#d4e0ea;}
   .type-card.fs{--card-accent:var(--forest);}
   .type-card.sm{--card-accent:var(--gold);}
   .type-card-label{
@@ -512,7 +523,7 @@
   </div>
   <div id="nav-links">
     <button class="nav-btn" data-view="home">Overview</button>
-    <button class="nav-btn" data-view="rm">Reenrollment messages</button>
+    <button class="nav-btn" data-view="rm">Signalvine Text</button>
     <button class="nav-btn" data-view="fs">Faculty slides</button>
     <button class="nav-btn" data-view="sm">Social slides</button>
     <button class="nav-btn" data-view="dept">Departments</button>
@@ -538,28 +549,17 @@ const WEEKS = [
     periodStart: "8/24/2026",
     periodEnd: "8/30/2026",
     theme: "Welcome + Start Strong",
+    themeApproved: false,
     sentDate: "8/26/2026",
-    reenrollment: [
-      {
-        source: "Excel Tracker",
-        text: "Classes start on Tuesday, 8/26, but if you need to make any last-minute changes to your schedule, you have until Monday, September 1 to do so. Before making changes, check your DegreeWorks Audit and confirm with Jay Express that the change will not impact your financial aid. Between 8/26 and 9/1, there is an $18 change-of-program fee per class if you add or swap a class, and if you drop a class during this time, you will receive a 75% refund. And if you have not yet set up your CUNY and Microsoft Multi-Factor Authentication to keep access to CUNYfirst, Brightspace, Navigate, and email, please do so before 9/2. [MFA instructions link]"
-      },
-      {
-        source: "Success Campaign Website",
-        text: "Hello [First Name]! Classes start Tues, Aug 26, and there are important changes to how you will access your John Jay and CUNY accounts. You must set up CUNY Multi-Factor Authentication (MFA) to keep access to CUNYfirst, Schedule Builder, Brightspace, Navigate, and more. Set this up by August 29, 2025, to avoid losing access. It only takes 5 minutes with your computer + phone. Instructions here."
-      }
-    ],
-    faculty: { href: "https://drive.google.com/file/d/1J15RCJL_V0UZqjhRh26Dqv6m4mdJxQGX/view" },
+    reenrollment: [],
+    faculty: { href: "" },
     social: { href: "" },
     dates: [
       { label: "First day of classes", date: "8/28" },
       { label: "100% tuition refund deadline", date: "8/27" },
       { label: "Add/swap without late fee", date: "8/27" }
     ],
-    aligned: [
-      { sentBy: "Registrar", theme: "Add/drop deadline reminder", due: "8/27", message: "", faculty: { href: "" }, social: { href: "" } },
-      { sentBy: "Financial Aid", theme: "FAFSA verification requests going out", due: "9/2", message: "", faculty: { href: "" }, social: { href: "" } }
-    ]
+    aligned: []
   },
   {
     weekLabel: "Week 2",
@@ -567,14 +567,15 @@ const WEEKS = [
     periodStart: "8/31/2026",
     periodEnd: "9/6/2026",
     theme: "Key Deadlines",
+    themeApproved: false,
     sentDate: "9/2/2026",
     reenrollment: [
       {
         source: "",
-        text: "Heads up, Bloodhound! The deadline to drop classes for a 50% tuition refund is September 8, 2025, and the last day to drop without a grade of \"W\" or qualify for a 25% tuition refund is September 15. September 15 is also the deadline for attendance verification. Be sure to review your courses before these deadlines, log in to Brightspace for your assignments, and reach out to an Academic Advisor or contact jayexpress@jay.cuny.edu if you have any questions or need assistance!"
+        text: "Start September strong, Bloodhound! Showing up to class and staying active in Brightspace are two of the best ways to stay on track. Attendance verification for Financial Aid purposes runs Sept. 4–17, so be sure to attend your classes, whether online or in person. If you're marked as never attended during this period, you may receive a WN grade. Need to make a schedule change? Sept. 10 is the last day for a 50% tuition refund, and Sept. 17 is the last day to drop without a W."
       }
     ],
-    faculty: { href: "https://drive.google.com/file/d/1j4NPMOoxmCvMr6jUBn45sbV6n5N5Pw-p/view" },
+    faculty: { href: "" },
     social: { href: "" },
     dates: [
       { label: "VOE opens", date: "9/4" },
@@ -582,10 +583,7 @@ const WEEKS = [
       { label: "75% tuition refund deadline", date: "9/3" },
       { label: "Add/swap w/ late fee deadline", date: "9/3" }
     ],
-    aligned: [
-      { sentBy: "Registrar", theme: "Add/swap deadline", due: "9/3", message: "", faculty: { href: "" }, social: { href: "" } },
-      { sentBy: "Registrar", theme: "Verification of enrollment (VOE) opens", due: "9/4", message: "", faculty: { href: "" }, social: { href: "" } }
-    ]
+    aligned: []
   },
   {
     weekLabel: "Week 3",
@@ -593,23 +591,26 @@ const WEEKS = [
     periodStart: "9/7/2026",
     periodEnd: "9/13/2026",
     theme: "Build Strong Academic Habits",
+    themeApproved: false,
     sentDate: "9/8/2026",
     reenrollment: [
       {
         source: "",
-        text: "Did you know that connecting with your professors can increase your academic success, help you find mentors, and open doors for future opportunities? Try these tips: 1) Introduce yourself early, 2) Visit office hours, 3) Participate in class, and 4) Ask questions when you need help. Start it this week — your future self will thank you!"
+        text: "Did you know that connecting with your professors can increase your academic success, help you find mentors, and open doors for future opportunities? Try these tips: 1) Introduce yourself early, 2) Visit office hours, 3) Participate in class, and 4) Ask questions when you need help."
+      },
+      {
+        source: "",
+        text: "Staying connected also means staying connected online! Set up Multi-Factor Authentication (MFA) by Sept. 21 to keep access to your email, Brightspace, CUNYfirst, and Navigate360. [MFA instructions link] Start this week—your future self will thank you!"
       }
     ],
-    faculty: { href: "https://drive.google.com/file/d/11d-mg9RwEHql6Z_ghZu4jG-GWvJruYqn/view" },
+    faculty: { href: "" },
     social: { href: "" },
     dates: [
       { label: "College closed — no classes", date: "9/7" },
       { label: "50% tuition refund deadline", date: "9/10" },
       { label: "Pass/No Credit deadline", date: "9/10" }
     ],
-    aligned: [
-      { sentBy: "Registrar", theme: "Pass/No Credit grade option deadline", due: "9/10", message: "", faculty: { href: "" }, social: { href: "" } }
-    ]
+    aligned: []
   },
   {
     weekLabel: "Week 4",
@@ -617,14 +618,10 @@ const WEEKS = [
     periodStart: "9/14/2026",
     periodEnd: "9/20/2026",
     theme: "Stay on Track Academically",
+    themeApproved: false,
     sentDate: "9/16/2026",
-    reenrollment: [
-      {
-        source: "",
-        text: "Quick reminder: today is the last day to drop a class without a W. Week 4 is also a great time to plan out your assignments—use a calendar, break assignments into steps, and set small deadlines. Our Learning Centers are here to help: https://www.jjay.cuny.edu/academics/academic-resources-services/tutoring-academic-support"
-      }
-    ],
-    faculty: { href: "https://docs.google.com/presentation/d/1GBZgisDCZq3s3apiRlG5VJijOl7CFvqj1/present?slide=id.p1" },
+    reenrollment: [],
+    faculty: { href: "" },
     social: { href: "" },
     dates: [
       { label: "VOE closes", date: "9/17" },
@@ -634,8 +631,7 @@ const WEEKS = [
       { label: "\"W\" / \"WN\" grades assigned", date: "9/18" }
     ],
     aligned: [
-      { sentBy: "Registrar", theme: "Declare-your-major deadline", due: "9/17", message: "", faculty: { href: "" }, social: { href: "" } },
-      { sentBy: "Financial Aid", theme: "25% refund window closing", due: "9/17", message: "", faculty: { href: "" }, social: { href: "" } }
+      { sentBy: "AAC", theme: "Welcome Message", due: "", message: "", faculty: { href: "" }, social: { href: "" } }
     ]
   },
   {
@@ -655,12 +651,97 @@ const WEEKS = [
     social: { href: "" },
     dates: [
       { label: "No classes scheduled", date: "9/21" },
+      { label: "ECI requests go out to faculty", date: "9/24" },
       { label: "Grade appeal deadline (Sp/Su 2026)", date: "9/24" },
       { label: "WA grades assigned", date: "9/27" }
     ],
     aligned: [
-      { sentBy: "Cohort Groups", theme: "WN grade reminder (targeted)", due: "9/21", message: "", faculty: { href: "" }, social: { href: "" } },
-      { sentBy: "Advisement", theme: "Non-mandatory advising campaign", due: "9/21", message: "", faculty: { href: "" }, social: { href: "" } }
+      { sentBy: "AAC", theme: "Non-mandatory Advising Campaigns", due: "", message: "", faculty: { href: "" }, social: { href: "" } }
+    ]
+  },
+  {
+    weekLabel: "Week 6",
+    date: "9/28",
+    periodStart: "9/28/2026",
+    periodEnd: "10/4/2026",
+    theme: "Ask for Help Early",
+    themeApproved: false,
+    sentDate: "",
+    reenrollment: [],
+    faculty: { href: "" },
+    social: { href: "" },
+    dates: [
+      { label: "2027/2028 FAFSA opens", date: "10/1" }
+    ],
+    aligned: [
+      { sentBy: "Financial Aid", theme: "2027/2028 FAFSA opens — campaign starts", due: "10/1", message: "", faculty: { href: "" }, social: { href: "" } }
+    ]
+  },
+  {
+    weekLabel: "Week 7",
+    date: "10/5",
+    periodStart: "10/5/2026",
+    periodEnd: "10/11/2026",
+    theme: "Connect College to Your Career",
+    themeApproved: false,
+    sentDate: "",
+    reenrollment: [],
+    faculty: { href: "" },
+    social: { href: "" },
+    dates: [
+      { label: "ECI Faculty Check-In's due", date: "10/8" }
+    ],
+    aligned: [
+      { sentBy: "AAC", theme: "Mandatory Advising Campaigns", due: "", message: "", faculty: { href: "" }, social: { href: "" } }
+    ]
+  },
+  {
+    weekLabel: "Week 8",
+    date: "10/12",
+    periodStart: "10/12/2026",
+    periodEnd: "10/18/2026",
+    theme: "Midsemester Academic Check-In",
+    themeApproved: false,
+    sentDate: "",
+    reenrollment: [],
+    faculty: { href: "" },
+    social: { href: "" },
+    dates: [
+      { label: "College closed — no classes", date: "10/12" },
+      { label: "Classes follow Monday schedule", date: "10/13" }
+    ],
+    aligned: []
+  },
+  {
+    weekLabel: "Week 9",
+    date: "10/19",
+    periodStart: "10/19/2026",
+    periodEnd: "10/25/2026",
+    theme: "Know Your Withdrawal Options",
+    themeApproved: false,
+    sentDate: "",
+    reenrollment: [],
+    faculty: { href: "" },
+    social: { href: "" },
+    dates: [],
+    aligned: []
+  },
+  {
+    weekLabel: "Week 10",
+    date: "10/26",
+    periodStart: "10/26/2026",
+    periodEnd: "11/1/2026",
+    theme: "Well-Being & Getting Through the Semester",
+    themeApproved: false,
+    sentDate: "",
+    reenrollment: [],
+    faculty: { href: "" },
+    social: { href: "" },
+    dates: [
+      { label: "Last day to apply for Fall 2026 graduation", date: "~11/1" }
+    ],
+    aligned: [
+      { sentBy: "Registrar", theme: "Last day to withdraw", due: "", message: "", faculty: { href: "" }, social: { href: "" } }
     ]
   }
 ];
@@ -674,7 +755,8 @@ function setActiveNav(view){
 }
 
 function previewText(week){
-  const t = week.reenrollment[0] ? week.reenrollment[0].text : "";
+  if (!week.reenrollment.length) return "Not added yet";
+  const t = week.reenrollment[0].text;
   return t.length > 70 ? t.slice(0, 70) + "…" : t;
 }
 
@@ -687,7 +769,7 @@ function renderHome(){
           <div class="aligned-item">
             <button class="msg-box" data-week="${wi}" data-aligned="${ai}">
               <span><span class="dept-name">${a.sentBy}:</span> <span class="msg-theme">${a.theme}</span></span>
-              <span class="due">Due ${a.due}</span>
+              <span class="due">${a.due ? 'Due ' + a.due : 'Date TBD'}</span>
             </button>
           </div>`).join('')
       : `<span class="empty-cell">No aligned messages logged yet.</span>`;
@@ -702,12 +784,13 @@ function renderHome(){
           <div class="week-block-meta">${w.weekLabel}</div>
           <div class="week-block-period">${w.periodStart} &ndash; ${w.periodEnd}</div>
           <h2>${w.theme}</h2>
+          ${w.themeApproved === false ? `<p class="theme-pending">Theme pending approval</p>` : ''}
         </div>
         <div class="week-body">
           <div class="week-left">
             <div class="card-row">
               <button class="type-card rm" data-view="rm" data-week="${wi}">
-                <div class="type-card-label">Reenrollment message</div>
+                <div class="type-card-label">Signalvine Text</div>
                 <div class="type-card-preview">${previewText(w)}</div>
               </button>
               <button class="type-card fs" data-view="fs" data-week="${wi}">
@@ -748,7 +831,7 @@ function renderTypePage(type, highlightIndex){
   setActiveNav(type);
 
   const config = {
-    rm: { title: "Reenrollment messages", sub: "The full Signal Vine message sent to students each week.", accent: "rm" },
+    rm: { title: "Signalvine Text", sub: "The full Signal Vine message sent to students each week.", accent: "rm" },
     fs: { title: "Faculty slides", sub: "The faculty-facing slide or graphic for each week.", accent: "fs" },
     sm: { title: "Social slides", sub: "The social media graphic for each week.", accent: "sm" }
   }[type];
@@ -766,8 +849,10 @@ function renderTypePage(type, highlightIndex){
       </div>`;
 
     if (type === 'rm') {
-      html += `<div class="type-entry-body">${w.reenrollment.map(m => `
-        <p>${m.source ? `<span class="src-label">${m.source}</span>` : ''}${m.text}</p>`).join('')}</div>`;
+      html += w.reenrollment.length
+        ? `<div class="type-entry-body">${w.reenrollment.map(m => `
+        <p>${m.source ? `<span class="src-label">${m.source}</span>` : ''}${m.text}</p>`).join('')}</div>`
+        : `<p class="type-entry-empty">Not added yet.</p>`;
     } else {
       const data = type === 'fs' ? w.faculty : w.social;
       if (data && data.href) {
