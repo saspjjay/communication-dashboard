@@ -1,6 +1,3 @@
-
-
-Index · HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +12,7 @@ Index · HTML
     --card: rgba(255,255,255,0.90);
     --card-solid:#ffffff;
     --line: rgba(46,66,86,0.16);
- 
+
     --navy:#2e4256;
     --navy-soft:#e3e9ee;
     --forest:#3c5c48;
@@ -24,7 +21,7 @@ Index · HTML
     --gold-soft:#f2e8d4;
     --maroon:#7c3b3b;
     --maroon-soft:#f3e3e1;
- 
+
     --radius:12px;
   }
   *{box-sizing:border-box;}
@@ -41,7 +38,7 @@ Index · HTML
   }
   a{color:inherit;}
   h1,h2,h3{font-family:'Iowan Old Style','Georgia',serif;}
- 
+
   #topbar{
     background:rgba(255,255,255,0.10);
     backdrop-filter:blur(14px);
@@ -89,13 +86,13 @@ Index · HTML
   }
   .nav-btn:hover{background:rgba(255,255,255,0.18);}
   .nav-btn.active{background:#ffffff; border-color:#ffffff; color:var(--navy);}
- 
+
   #main{
     max-width:1120px;
     margin:0 auto;
     padding:44px 40px 80px;
   }
- 
+
   /* ---- Overview layout: sidebar + week list ---- */
   .overview-layout{
     display:flex;
@@ -188,7 +185,7 @@ Index · HTML
     flex:1;
     min-width:0;
   }
- 
+
   /* ---- Home: one glass box per week ---- */
   .week-table{
     width:100%;
@@ -303,7 +300,7 @@ Index · HTML
     margin-top:6px;
     font-weight:600;
   }
- 
+
   /* Important dates box — full-height sidebar next to tiles + aligned messages */
   .dates-box{
     border:1.5px solid var(--line);
@@ -356,7 +353,7 @@ Index · HTML
     color:var(--ink-faint);
     font-style:italic;
   }
- 
+
   /* ---- Aligned messages, per week ---- */
   .week-aligned-label{
     font-size:11px;
@@ -423,7 +420,7 @@ Index · HTML
     padding:16px;
     text-align:center;
   }
- 
+
   /* ---- Type index pages ---- */
   .page-glass{
     background:var(--card);
@@ -523,7 +520,7 @@ Index · HTML
     color:var(--ink-faint);
     font-size:13.5px;
   }
- 
+
   /* ---- Departments list & detail ---- */
   .dept-grid{
     display:grid;
@@ -604,7 +601,7 @@ Index · HTML
     border-radius:20px;
     padding:8px 14px;
   }
- 
+
   @media (max-width:760px){
     #main{padding:28px 18px;}
     #topbar{padding:14px 18px; flex-wrap:wrap; gap:10px;}
@@ -631,7 +628,7 @@ Index · HTML
 </style>
 </head>
 <body>
- 
+
 <div id="topbar">
   <div>
     <p class="brand-eyebrow">SASP · Communications</p>
@@ -645,9 +642,9 @@ Index · HTML
     <button class="nav-btn" data-view="dept">Departments</button>
   </div>
 </div>
- 
+
 <main id="main"></main>
- 
+
 <script>
 /* ============================================================
    EDIT WEEKS HERE.
@@ -864,26 +861,26 @@ const WEEKS = [
   }
 ];
 /* ============================================================ */
- 
+
 const main = document.getElementById('main');
 const navBtns = document.querySelectorAll('.nav-btn');
- 
+
 function setActiveNav(view){
   navBtns.forEach(b => b.classList.toggle('active', b.dataset.view === view));
 }
- 
+
 function previewText(week){
   if (!week.reenrollment.length) return "Not added yet";
   const t = week.reenrollment[0].text;
   return t.length > 70 ? t.slice(0, 70) + "…" : t;
 }
- 
+
 function renderHome(){
   setActiveNav('home');
- 
+
   const sidebarItems = WEEKS.map((w, wi) => `
       <button class="week-sidebar-item" data-week="${wi}">${w.weekLabel}</button>`).join('');
- 
+
   const tables = WEEKS.map((w, wi) => {
     const alignedHTML = w.aligned.length
       ? w.aligned.map((a, ai) => `
@@ -894,11 +891,11 @@ function renderHome(){
             </button>
           </div>`).join('')
       : `<span class="empty-cell">No aligned messages logged yet.</span>`;
- 
+
     const datesHTML = w.dates.length
       ? `<ul class="dates-list">${w.dates.map(d => `<li><span>${d.label}</span><span class="d-date">${d.date}</span></li>`).join('')}</ul>`
       : `<span class="dates-empty">None logged yet.</span>`;
- 
+
     return `
       <div class="week-table" id="week-${wi}">
         <div class="week-head">
@@ -933,7 +930,7 @@ function renderHome(){
         </div>
       </div>`;
   }).join('');
- 
+
   main.innerHTML = `
     <div class="overview-layout">
       <nav class="week-sidebar" id="week-sidebar">
@@ -945,7 +942,7 @@ function renderHome(){
       </nav>
       <div class="overview-weeks" id="overview-weeks">${tables}</div>
     </div>`;
- 
+
   document.querySelectorAll('.type-card').forEach(btn => {
     btn.addEventListener('click', () => renderTypePage(btn.dataset.view, parseInt(btn.dataset.week, 10)));
   });
@@ -956,7 +953,7 @@ function renderHome(){
       renderDeptDetail(WEEKS[wi].aligned[ai].sentBy, wi, ai, 'home');
     });
   });
- 
+
   const sidebarNav = document.getElementById('week-sidebar');
   const sidebarToggle = document.getElementById('sidebar-toggle');
   sidebarToggle.addEventListener('click', () => {
@@ -964,7 +961,7 @@ function renderHome(){
     sidebarToggle.innerHTML = isCollapsed ? '&raquo;' : '&laquo;';
     sidebarToggle.title = isCollapsed ? 'Expand' : 'Collapse';
   });
- 
+
   const sidebarBtns = document.querySelectorAll('.week-sidebar-item');
   sidebarBtns.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -979,7 +976,7 @@ function renderHome(){
       }
     });
   });
- 
+
   // Keep the sidebar in sync as the person scrolls through the weeks manually
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver((entries) => {
@@ -993,20 +990,20 @@ function renderHome(){
     document.querySelectorAll('.week-table').forEach(el => observer.observe(el));
   }
 }
- 
+
 function renderTypePage(type, highlightIndex){
   setActiveNav(type);
- 
+
   const config = {
     rm: { title: "Signalvine Text", sub: "The full Signal Vine message sent to students each week.", accent: "rm" },
     fs: { title: "Faculty slides", sub: "The faculty-facing slide or graphic for each week.", accent: "fs" },
     sm: { title: "Social slides", sub: "The social media graphic for each week.", accent: "sm" }
   }[type];
- 
+
   let html = `<button class="back-link" id="type-back">&lsaquo; Back to overview</button><div class="page-glass">
     <p class="type-page-title">${config.title}</p>
     <p class="type-page-sub">${config.sub}</p>`;
- 
+
   WEEKS.forEach((w, i) => {
     const isHighlighted = i === highlightIndex;
     html += `<div class="type-entry${isHighlighted ? ' highlighted' : ''}" id="entry-${type}-${i}">
@@ -1014,7 +1011,7 @@ function renderTypePage(type, highlightIndex){
         <span class="type-entry-week">${w.weekLabel} &middot; ${w.date}</span>
         <span class="type-entry-theme">${w.theme}</span>
       </div>`;
- 
+
     if (type === 'rm') {
       html += w.reenrollment.length
         ? `<div class="type-entry-body">${w.reenrollment.map(m => `
@@ -1030,30 +1027,30 @@ function renderTypePage(type, highlightIndex){
     }
     html += `</div>`;
   });
- 
+
   html += `</div>`;
   main.innerHTML = html;
- 
+
   document.getElementById('type-back').addEventListener('click', renderHome);
- 
+
   if (Number.isInteger(highlightIndex)) {
     const target = document.getElementById(`entry-${type}-${highlightIndex}`);
     if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 }
- 
+
 /* ---- Departments: list -> department detail (highlightable) -> single message detail ---- */
- 
+
 function getDepartments(){
   const names = new Set();
   WEEKS.forEach(w => w.aligned.forEach(a => names.add(a.sentBy)));
   return Array.from(names).sort();
 }
- 
+
 function renderDeptList(){
   setActiveNav('dept');
   const depts = getDepartments();
- 
+
   let html = `<div class="page-glass">
     <p class="type-page-title">Departments</p>
     <p class="type-page-sub">Every department's messages, organized by who sent them.</p>
@@ -1062,7 +1059,7 @@ function renderDeptList(){
         <div class="dept-card-name">Reenrollment Group</div>
         <div class="dept-card-count">${WEEKS.length} message${WEEKS.length === 1 ? '' : 's'}</div>
       </button>`;
- 
+
   if (depts.length) {
     const counts = depts.map(name => {
       let count = 0;
@@ -1076,7 +1073,7 @@ function renderDeptList(){
       </button>`).join('');
   }
   html += `</div></div>`;
- 
+
   main.innerHTML = html;
   document.querySelectorAll('.dept-card').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -1085,25 +1082,25 @@ function renderDeptList(){
     });
   });
 }
- 
+
 function renderDeptDetail(deptName, highlightWeek, highlightAligned, fromView){
   setActiveNav('dept');
- 
+
   const backHTML = fromView === 'home'
     ? `<button class="back-link" id="dept-back">&lsaquo; Back to overview</button>`
     : `<button class="back-link" id="dept-back">&lsaquo; Back to departments</button>`;
- 
+
   let html = `${backHTML}<div class="page-glass">
     <p class="type-page-title">${deptName}</p>
     <p class="type-page-sub">All aligned messages sent by ${deptName}, across weeks.</p>`;
- 
+
   const entries = [];
   WEEKS.forEach((w, wi) => {
     w.aligned.forEach((a, ai) => {
       if (a.sentBy === deptName) entries.push({ wi, ai, w, a });
     });
   });
- 
+
   if (!entries.length) {
     html += `<p class="type-entry-empty">No messages logged yet.</p>`;
   } else {
@@ -1120,7 +1117,7 @@ function renderDeptDetail(deptName, highlightWeek, highlightAligned, fromView){
     }).join('');
   }
   html += `</div>`;
- 
+
   main.innerHTML = html;
   document.getElementById('dept-back').addEventListener('click', () => {
     if (fromView === 'home') renderHome();
@@ -1131,47 +1128,47 @@ function renderDeptDetail(deptName, highlightWeek, highlightAligned, fromView){
       renderAlignedDetail(parseInt(btn.dataset.week, 10), parseInt(btn.dataset.aligned, 10), deptName, highlightWeek, highlightAligned, fromView);
     });
   });
- 
+
   if (Number.isInteger(highlightWeek) && Number.isInteger(highlightAligned)) {
     const target = document.getElementById(`dept-entry-${highlightWeek}-${highlightAligned}`);
     if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 }
- 
+
 function renderAlignedDetail(weekIndex, alignedIndex, deptName, highlightWeek, highlightAligned, fromView){
   setActiveNav('dept');
   const w = WEEKS[weekIndex];
   const a = w.aligned[alignedIndex];
- 
+
   let html = `
     <button class="back-link" id="aligned-back">&lsaquo; Back to ${deptName}</button>
     <div class="page-glass">
     <p class="type-page-title">${a.theme}</p>
     <p class="type-page-sub">${a.sentBy} &middot; ${w.weekLabel} &middot; ${w.date} &middot; Due ${a.due}</p>
- 
+
     <div class="type-entry">
       <div class="type-entry-head"><span class="type-entry-week">Message</span></div>
       ${a.message ? `<div class="type-entry-body"><p>${a.message}</p></div>` : `<p class="type-entry-empty">Not added yet.</p>`}
     </div>
- 
+
     <div class="type-entry">
       <div class="type-entry-head"><span class="type-entry-week">Faculty slide</span></div>
       ${a.faculty && a.faculty.href ? `<a class="type-entry-link fs" href="${a.faculty.href}" target="_blank" rel="noopener">Open &rsaquo;</a>` : `<p class="type-entry-empty">Not added yet.</p>`}
     </div>
- 
+
     <div class="type-entry">
       <div class="type-entry-head"><span class="type-entry-week">Social slide</span></div>
       ${a.social && a.social.href ? `<a class="type-entry-link sm" href="${a.social.href}" target="_blank" rel="noopener">Open &rsaquo;</a>` : `<p class="type-entry-empty">Not added yet.</p>`}
     </div>
     </div>`;
- 
+
   main.innerHTML = html;
- 
+
   document.getElementById('aligned-back').addEventListener('click', () => {
     renderDeptDetail(deptName, highlightWeek, highlightAligned, fromView);
   });
 }
- 
+
 navBtns.forEach(btn => {
   btn.addEventListener('click', () => {
     if (btn.dataset.view === 'home') renderHome();
@@ -1179,14 +1176,9 @@ navBtns.forEach(btn => {
     else renderTypePage(btn.dataset.view);
   });
 });
- 
+
 renderHome();
 </script>
- 
+
 </body>
 </html>
- 
-
-
-
-
