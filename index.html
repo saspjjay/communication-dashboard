@@ -6,21 +6,24 @@
 <title>SASP Communications — Fall 2026</title>
 <style>
   :root{
-    --ink:#20242c;
-    --ink-soft:#4c525c;
-    --ink-faint:#7c828c;
+    --ink:#1a1f33;
+    --ink-soft:#3d4358;
+    --ink-faint:#767c94;
     --card: rgba(255,255,255,0.90);
     --card-solid:#ffffff;
-    --line: rgba(46,66,86,0.16);
+    --line: rgba(35,44,100,0.16);
 
-    --navy:#2e4256;
-    --navy-soft:#e3e9ee;
-    --forest:#3c5c48;
-    --forest-soft:#e5ede6;
-    --gold:#93691f;
-    --gold-soft:#f2e8d4;
-    --maroon:#7c3b3b;
-    --maroon-soft:#f3e3e1;
+    /* John Jay College official palette */
+    --navy:#232c64;        /* Dark Blue — primary */
+    --navy-soft:#e2e4ef;
+    --cyan:#0098cf;        /* Light Blue (digital/accessible) — interactive accent */
+    --cyan-soft:#dcf1f9;
+    --forest:#00ada8;      /* Teal — accent, used sparingly */
+    --forest-soft:#dcf5f3;
+    --gold:#c98a10;        /* Amber, darkened for text contrast — accent, used sparingly */
+    --gold-soft:#fbedcf;
+    --maroon:#c96a15;      /* Orange, darkened for text contrast — accent, used sparingly */
+    --maroon-soft:#fce6d3;
 
     --radius:12px;
   }
@@ -32,8 +35,8 @@
     color:var(--ink);
     min-height:100vh;
     background:
-      radial-gradient(circle at 15% -10%, rgba(255,255,255,0.06), transparent 40%),
-      linear-gradient(160deg, #1c2a3a 0%, #24384a 45%, #2e4256 100%);
+      radial-gradient(circle at 15% -10%, rgba(255,255,255,0.05), transparent 40%),
+      linear-gradient(160deg, #171d47 0%, #1e2757 45%, #232c64 100%);
     background-attachment:fixed;
   }
   a{color:inherit;}
@@ -276,7 +279,7 @@
     --card-accent:var(--navy);
     background:var(--navy-soft);
   }
-  .type-card.rm:hover{background:#d4e0ea;}
+  .type-card.rm:hover{background:#cdd1e5;}
   .type-card.fs{--card-accent:var(--forest);}
   .type-card.sm{--card-accent:var(--gold);}
   .type-card-label{
