@@ -1016,22 +1016,33 @@ const WEEKS = [
       { sentBy: "Registrar", theme: "Last day to withdraw", due: "", message: "", faculty: { href: "" }, social: { href: "" } }
     ]
   },
-  {
+    {
     weekLabel: "Week 11",
     date: "11/2",
     periodStart: "11/2/2026",
     periodEnd: "11/8/2026",
-    theme: "Get Ready for Registration",
-    themeApproved: false,
+    theme: "Get Ready to Register",
+    themeApproved: true,
     sentDate: "10/21/2026",
-    reenrollment: [],
-    faculty: { href: "" },
-    social: { href: "" },
+    reenrollment: [
+      {
+        source: "",
+        text: "Winter & Spring 2027 registration opens soon, but you can prepare now! Check CUNYfirst for holds or financial aid checklist items, review your DegreeWorks plan, and meet with an advisor if you need help planning your courses. Make sure your CUNY MFA is also set up so you can access CUNYfirst and Schedule Builder when it's your turn to register: https://doitapps2.jjay.cuny.edu/mfa/\nA little planning now can make registration easier. Keep finishing the semester strong: you've got this!"
+      }
+    ],
+    faculty: {
+      href: "https://docs.google.com/presentation/d/1rGBkTEDJEc92fp3exK0qvPG4TAGASKrH/present?usp=sharing&ouid=101394570988874014622&rtpof=true&sd=true",
+      pdf: "https://drive.google.com/file/d/1dYJCfGuc2M129QX4rRqhOdKDy2sAndij/view?usp=sharing",
+      png: "https://drive.google.com/file/d/1aoP4yFjVtWmGemsPwgiOWtiv2JI6NjuW/view?usp=sharing"
+    },
+    social: { href: "https://drive.google.com/file/d/150oqP_5SWf9jiEeMoEQbuYu2smB3ZkY2/view?usp=sharing" },
     dates: [
       { label: "Course withdrawal period ends (grade of \"W\")", date: "11/5" },
       { label: "No classes scheduled", date: "11/8" }
     ],
-    aligned: []
+    aligned: [
+      { sentBy: "UGF", theme: "Freshman Forgiveness Opt-In", due: "", message: "Hi [First Name], Nancy, Director of UGF at John Jay, here! Freshman Forgiveness can protect your GPA if you get an F or FIN. If you pass, nothing changes. Take 2 minutes to opt in here now: https://doitapps2.jjay.cuny.edu/freshman-forgiveness/home Questions? Ask Buddy, our AI chatbot.", faculty: { href: "" }, social: { href: "" } }
+    ]
   },
   {
     weekLabel: "Week 12",
